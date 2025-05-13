@@ -1,0 +1,47 @@
+.content {
+    padding: 0px;
+    border-radius: 16px;
+    border: 1px solid rgba(195, 255, 251, 0.1);
+    background: #121A1A;
+}
+
+.header {
+    padding: 0px;
+    border-radius: 16px 16px 0px 0px;
+    background: #121A1A;
+}
+
+.title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    width: 100%;
+    color: #C3FFFB;
+}
+
+.body {
+    padding: 0px;
+}
+
+.close {
+    display: none;
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 16px 16px;
+    text-align: left;
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    gap: 8px;
+    overflow: hidden;
+}
+
+.item:hover {
+    background: #2A3838;
+}

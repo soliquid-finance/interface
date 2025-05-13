@@ -1,0 +1,44 @@
+/* https://mantine.dev/styles/css-variables/#primary-color-variables */
+@import './icomoon.css';
+
+@layer mantine, mantine-datatable;
+
+:root {
+  --mantine-color-body: #070A0A;
+  --primary-color: #C3FFFB;
+  --primary-color-opacity-50: rgba(195, 255, 251, 0.50);
+  --background-color: #2A3838;
+  --mantine-color-text: #627170;
+  --mantine-Modal-inner: #121A1A;
+}
+
+html,
+body {
+  min-height: 100vh;
+  background-color: '#070A0A';
+}
+
+#root {
+  height: 100vh;
+}
+
+/* Import icomoon styles */
+
+/* Custom Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--primary-color);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--primary-color-opacity-20);
+}
+
+/* ::-webkit-scrollbar-track {
+  background-color: var(--background-color);
+} */

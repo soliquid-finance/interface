@@ -1,0 +1,22 @@
+.portionChip {
+  width: 38px;
+  height: 18px;
+  background: var(--background-color);
+  color: var(--primary-color-opacity-50); /* Default text color with 50% opacity */
+  border-radius: 3px;
+  border: 1px solid transparent; /* Default border is transparent */
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  font-size: 10px;
+  font-family: Inter, sans-serif;
+  font-weight: 500;
+  word-wrap: break-word;
+  transition: color 0.2s ease-in-out, border-color 0.2s ease-in-out; /* Smooth transition */
+}
+
+.portionChip:hover {
+  color: var(--primary-color); /* Full opacity text color on hover */
+  border-color: var(--primary-color); /* Full opacity border color on hover */
+}

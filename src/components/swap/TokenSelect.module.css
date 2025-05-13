@@ -1,0 +1,120 @@
+.tokenSelectButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  height: 35px;
+  flex-shrink: 0;
+  padding: 8px 12px;
+  background: #2A3838;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  transition: all 0.15s linear;
+  cursor: pointer;
+}
+
+.tokenSelectButton:hover {
+  border-color: #C3FFFB;
+  background: #2A3838;
+}
+
+.tokenSelectButton:hover .icon-arrow-down2 {
+  color: #C3FFFB;
+}
+
+.tokenAvatar {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  background: lightgray 0px 0px / 100% 100% no-repeat;
+}
+
+.tokenName {
+  color: #FFF;
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.input {
+  flex-grow: 1;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  outline: none;
+  cursor: pointer;
+  color: #FFF;
+  width: 100%;
+}
+
+.input::placeholder {
+  color: #627170;
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.leadingIcon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin-right: 8px;
+}
+
+.trailingIcon {
+  display: flex;
+  width: 20px;
+  height: 20px;
+  padding: 1.75px 6.76px 2.25px 7px;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: 4px;
+  opacity: 0.6;
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(30px);
+
+}
+
+.span {
+  display: flex;
+  width: 6.24px;
+  height: 16px;
+  flex-direction: column;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #C3FFFB;
+  font-family: Basel;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: semi-bold;
+  line-height: 16px;
+}
+
+.slash {
+  display: flex;
+  width: 6.24px;
+  height: 16px;
+  flex-direction: column;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #C3FFFB;
+  font-family: Basel;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 535;
+  line-height: 16px;
+  /* 133.333% */
+}
+
+/* font-family: Inter;
+font-size: 14px;
+font-style: normal;
+font-weight: 400;
+line-height: normal; */

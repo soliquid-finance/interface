@@ -1,0 +1,121 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 450px;
+  min-width: 300px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  gap: 5px;
+  overflow: visible;
+  width: 100%;
+  max-width: 450px;
+}
+
+.swapCard {
+  background: #121A1A; /* Set default background color */
+  border-radius: 16px;
+  border: 1px solid rgba(195, 255, 251, 0.05);
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.2s ease-in-out, background-color 0.2s ease-in-out; /* Add transition for background */
+  padding: 20px;
+  width: 100%;
+}
+
+.swapCardFocused {
+  border-color: #C3FFFB; /* Highlight border color */
+  background: transparent; /* Make background transparent when focused */
+}
+
+/* .cardContent {
+  padding: 0px;
+} */
+
+.cardTitle {
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  color: white;
+  font-size: 12px;
+  font-family: Inter;
+  font-weight: 500;
+  word-wrap: break-word;
+}
+
+.cardBody {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  /* gap: 8px; */
+}
+
+.tokenSelect {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  min-height: 70px;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.input {
+  background-color: transparent;
+  font-size: 24px;
+  font-weight: 600;
+  text-align: right;
+  color: white;
+  outline: none;
+  border: none;
+  width: 50%;
+}
+
+.swapButton {
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: calc(50% - 20px);
+  left: 50%;
+  transform: translateX(-50%);
+  flex-shrink: 0;
+  border-radius: 12px;
+  border: 4px solid #070a0a;
+  background: #172121;
+  z-index: 10;
+}
+
+.swapButton:hover {
+  background: #2A3838;
+  border: 1px solid #C3FFFB;
+}
+
+.swapButton:hover>span {
+  color: #C3FFFB;
+}
+
+.priceInUSD {
+  color: #627170;
+  text-align: right;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}

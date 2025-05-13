@@ -1,0 +1,21 @@
+.root {
+    position: relative;
+    background-color: #C3FFFB;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 16px;
+    font-weight: 600;
+    font-size: 18px;
+    color: black;
+    text-align: center;
+    text-decoration: none;
+    height: 56px;
+    width: 100%;
+}
+
+.root:hover {
+    border: 1px solid #C3FFFB;
+    background: #2A3838;
+    color: #C3FFFB
+}

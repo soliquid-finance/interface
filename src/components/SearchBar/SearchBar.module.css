@@ -1,0 +1,128 @@
+.input {
+  /* display: none; */
+
+  @media (min-width: $mantine-breakpoint-xl) {
+    display: inline-block;
+  }
+
+  & input {
+    padding-inline-end: 4rem;
+    pointer-events: none;
+  }
+
+  & [data-position='right'] {
+    pointer-events: none;
+    --section-size: 4rem;
+  }
+
+  flex-grow: 1;
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-size: 14px;
+  outline: none;
+  cursor: pointer;
+}
+
+.input::placeholder {
+  color: #627170;
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.button {
+  display: inline-block;
+
+  @media (min-width: $mantine-breakpoint-xl) {
+    display: none;
+  }
+
+  & [data-position] {
+    pointer-events: none;
+    margin-inline-end: 0;
+  }
+}
+
+.container {
+  width: auto;
+  height: auto;
+  flex-shrink: 0;
+  border-radius: 16px;
+
+  backdrop-filter: blur(30px);
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+@media screen and (min-width: 768px) {
+  .container {
+    width: 450px;
+    padding: 0 12px;
+    height: 38px;
+    background: #121A1A;
+
+    /* padding: 0 16px; */
+  }
+}
+
+.leadingIcon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin-right: 12px;
+}
+
+.trailingIcon {
+  display: flex;
+  width: 20px;
+  height: 20px;
+  padding: 1.75px 6.76px 2.25px 7px;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: 4px;
+  opacity: 0.6;
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(30px);
+}
+
+.slash {
+  display: flex;
+  width: 6.24px;
+  height: 16px;
+  flex-direction: column;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #C3FFFB;
+  font-family: Basel;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 535;
+  line-height: 16px;
+  /* 133.333% */
+}
+
+
+.modalInput {
+  flex-grow: 1;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  outline: none;
+  cursor: pointer;
+  color: #FFF;
+  width: 100%;
+}
+
+.modalInput::placeholder {
+  color: #627170;
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
