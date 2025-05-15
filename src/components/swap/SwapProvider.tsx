@@ -56,8 +56,8 @@ export const SwapProvider = ({ children }: { children: ReactNode }) => {
   const [tokenFrom, setTokenFrom] = useState<SolanaToken | null>(defaultTokenFrom);
   const [tokenTo, setTokenTo] = useState<SolanaToken | null>(defaultTokenTo);
   const [tokenFromBalance, setTokenFromBalance] = useState<number | null>(null);
-  const [maxSlippage, setMaxSlippage] = useState<number | null>(0); // 0 for Auto, 0.005 for 0.5%, null for custom input
-  const [zeroSlippage, setZeroSlippage] = useState<boolean>(false);
+  const [maxSlippage, setMaxSlippage] = useState<number | null>(0.005); // 0 for Auto, 0.005 for 0.5%, null for custom input
+  const [zeroSlippage, setZeroSlippage] = useState<boolean>(true);
   const [isTokenFromBalanceSufficient, setIsTokenFromBalanceSufficient] = useState<boolean>(true);
   const [swapFromAmount, setSwapFromAmount] = useState<string>(''); // Add this state if not already present
 

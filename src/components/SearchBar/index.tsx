@@ -1,6 +1,6 @@
 import { ReactNode, useState, useEffect } from 'react';
 import { useMediaQuery } from '@mantine/hooks';
-// import TokenSelect from '@/components/swap/TokenSelect'; // Import TokenSelect
+
 import { SolanaToken } from '@/types';
 import classes from './SearchBar.module.css';
 
@@ -10,8 +10,7 @@ import { Text, Modal, TextInput, Group } from '@mantine/core';
 
 import { useCluster } from '@/components/solana/providers';
 import TokenListItem from '../swap/TokenListItem';
-// import styles from './TokenSelect.module.css';
-// import TokenListItem from '../swap/TokenListItem';
+
 
 
 const fetchTokens = async (chainId: number): Promise<SolanaToken[]> => {
@@ -92,7 +91,7 @@ export function SearchBar({
               className={classes.input}
               placeholder={placeholder}
               readOnly
-              value={selectedToken ? selectedToken.symbol : ''} // Display selected token symbol
+              value={selectedToken ? selectedToken.symbol : ''}
               onClick={() => setOpened(true)}
             />
             <div className={classes.trailingIcon}>
@@ -114,18 +113,19 @@ export function SearchBar({
             borderRadius: '16px',
             border: '1px solid rgba(195, 255, 251, 0.1)',
             background: '#121A1A',
-            overflow: 'hidden', // Prevent the modal itself from scrolling
+            overflow: 'hidden',
           },
           body: {
             padding: '0px',
-            maxHeight: '80vh', // Use 80% of the viewport height for responsiveness
-            minHeight: '300px', // Ensure a minimum height for smaller screens
-            overflowY: 'auto', // Enable scrolling only in the body
+            maxHeight: '80vh',
+            minHeight: '300px',
+            overflowY: 'auto',
           },
           header: {
-            padding: '16px', // Ensure the header has padding
-            borderBottom: '1px solid rgba(195, 255, 251, 0.1)', // Add a separator between header and body
-            background: '#121A1A', // Match the modal background
+            padding: '0px 16px',
+            borderBottom: '1px solid rgba(195, 255, 251, 0.1)',
+            background: '#121A1A',
+            minHeight: '50px',
           },
         }}
         title={

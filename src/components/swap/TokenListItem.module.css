@@ -37,7 +37,7 @@
 .tokenName {
   color: rgba(195, 255, 251, 0.50);
   font-family: Inter;
-  font-size: 8px;
+  font-size: 10px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
@@ -46,7 +46,7 @@
 .tokenAddress {
   color: #627170;
   font-family: Inter;
-  font-size: 8px;
+  font-size: 10px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;

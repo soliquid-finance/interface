@@ -4,6 +4,7 @@ import { useDebouncedValue } from '@mantine/hooks';
 import { Text, Modal, TextInput, Group } from '@mantine/core';
 import TokenListItem from './TokenListItem';
 import { useCluster } from '@/components/solana/providers';
+import clsx from 'clsx';
 import styles from './TokenSelect.module.css';
 
 import tokens from "./token.data";
@@ -70,43 +71,38 @@ export default function TokenSelect({ initialToken, onSelect, opened: externalOp
     if (isLoading) return <div>Loading...</div>;
     if (isError) return <div>Error loading tokens</div>;
 
+
     return (
         <>
-            <div
-                onClick={() => setOpened(true)}
-                className={`select-token ${styles.tokenSelectButton}`}
-                style={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', width: 'fit-content', padding: '8px', borderRadius: '8px', cursor: 'pointer',
-                    background: selectedToken ? 'transparent' : '#C3FFFB',
-                }}
+            <div onClick={() => setOpened(true)}
+                className={
+                    clsx(
+                        styles.tokenSelectButton,
+                        !selectedToken && styles.unselected
+                    )
+                }
             >
-                {selectedToken ? (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <div
-                            className={styles.tokenAvatar}
-                            style={{
-                                backgroundImage: `url('${selectedToken.logoURI}')`,
-                                width: '20px',
-                                height: '20px',
-                                borderRadius: '50%',
-                                backgroundSize: 'cover',
-                            }}
-                        />
-                        <Text size="md" fw={600} c="white" tt="capitalize" style={{ maxWidth: '80px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                            {selectedToken.symbol}
-                        </Text>
-                    </div>
-                ) : (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#C3FFFB', width: 'fit-content', padding: '0px 8px' }}>
-                        <Text size="md" fw={600} c="black" tt="capitalize" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                            Select
-                        </Text>
-                    </div>
-                )}
-                <span className="icon-arrow-down2" style={{ fontSize: '14px', color: selectedToken ? '#9CA3AF' : 'black' }} />
+                {selectedToken && <div className={styles.tokenAvatar} style={{ backgroundImage: `url('${selectedToken.logoURI}')` }} />}
+                <div
+                    className={
+                        clsx(
+                            styles.tokenSelectLabel,
+                            !selectedToken && styles.unselected
+                        )
+                    }
+                >
+                    {selectedToken ? selectedToken.symbol : 'Select'}
+                </div>
+                <span
+                    className={
+                        clsx(
+                            'icon-arrow-down2',
+                            !selectedToken && styles.unselected
+                        )
+                    }
+                />
             </div>
 
-            {/* Modal for token selection */}
             <Modal
                 opened={opened}
                 onClose={() => setOpened(false)}
@@ -118,18 +114,19 @@ export default function TokenSelect({ initialToken, onSelect, opened: externalOp
                         borderRadius: '16px',
                         border: '1px solid rgba(195, 255, 251, 0.1)',
                         background: '#121A1A',
-                        overflow: 'hidden', // Prevent the modal itself from scrolling
+                        overflow: 'hidden',
                     },
                     body: {
                         padding: '0px',
-                        maxHeight: '80vh', // Use 80% of the viewport height for responsiveness
-                        minHeight: '300px', // Ensure a minimum height for smaller screens
-                        overflowY: 'auto', // Enable scrolling only in the body
+                        maxHeight: '80vh',
+                        minHeight: '300px',
+                        overflowY: 'auto',
                     },
                     header: {
-                        padding: '16px', // Ensure the header has padding
-                        borderBottom: '1px solid rgba(195, 255, 251, 0.1)', // Add a separator between header and body
-                        background: '#121A1A', // Match the modal background
+                        padding: '0px 16px',
+                        borderBottom: '1px solid rgba(195, 255, 251, 0.1)',
+                        background: '#121A1A',
+                        minHeight: '50px',
                     },
                 }}
                 title={
@@ -148,7 +145,6 @@ export default function TokenSelect({ initialToken, onSelect, opened: externalOp
                     />
                 }
             >
-                
                 {filteredTokens.map((token, idx) => (
                     <TokenListItem
                         key={idx}
@@ -160,7 +156,6 @@ export default function TokenSelect({ initialToken, onSelect, opened: externalOp
                         }}
                     />
                 ))}
-                
             </Modal>
         </>
     );

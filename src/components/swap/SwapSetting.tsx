@@ -5,12 +5,12 @@ import styles from './SwapSetting.module.css';
 
 const SwapSetting = () => {
   const { maxSlippage, setMaxSlippage, zeroSlippage, setZeroSlippage } = useSwapContext();
-  const [customSlippage, setCustomSlippage] = useState<string>(''); // Custom input value
+  const [customSlippage, setCustomSlippage] = useState<string>('');
 
   const getDisplaySlippage = () => {
     if (maxSlippage === null) {
       if (customSlippage.endsWith('%')) {
-        return customSlippage; // Already formatted with '%'
+        return customSlippage;
       }
       return customSlippage ? `${customSlippage}%` : '-';
     }
@@ -59,18 +59,18 @@ const SwapSettingMenu = ({ maxSlippage, setMaxSlippage, customSlippage, setCusto
   const handleCustomSlippageChange = (value: string) => {
     // Allow only valid numbers with up to one dot and two decimal places
     const formattedValue = value
-      .replace(/[^0-9.]/g, '') // Remove non-numeric and non-dot characters
-      .replace(/(\..*?)\..*/g, '$1') // Prevent multiple dots
-      .replace(/^0+(\d)/, '$1') // Remove leading zeros
-      .replace(/^(\d*\.\d{2}).*/, '$1'); // Limit to two decimal places
+      .replace(/[^0-9.]/g, '')
+      .replace(/(\..*?)\..*/g, '$1')
+      .replace(/^0+(\d)/, '$1')
+      .replace(/^(\d*\.\d{2}).*/, '$1');
     setCustomSlippage(formattedValue);
-    setMaxSlippage(null); // Unselect predefined options
+    setMaxSlippage(null);
   };
 
   const handleBlur = () => {
     setIsFocused(false);
     if (customSlippage) {
-      // Format the value to 2 decimal places and append '%'
+
       const formattedValue = parseFloat(customSlippage).toFixed(2);
       setCustomSlippage(`${formattedValue}%`);
     }
@@ -78,7 +78,7 @@ const SwapSettingMenu = ({ maxSlippage, setMaxSlippage, customSlippage, setCusto
 
   const handleFocus = () => {
     setIsFocused(true);
-    // Remove '%' when focusing the input
+
     if (customSlippage.endsWith('%')) {
       setCustomSlippage(customSlippage.slice(0, -1));
     }
@@ -86,7 +86,7 @@ const SwapSettingMenu = ({ maxSlippage, setMaxSlippage, customSlippage, setCusto
 
   const handlePredefinedSlippage = (value: number) => {
     setMaxSlippage(value);
-    setCustomSlippage(''); // Clear custom input
+    setCustomSlippage('');
   };
 
   return (
@@ -94,7 +94,7 @@ const SwapSettingMenu = ({ maxSlippage, setMaxSlippage, customSlippage, setCusto
       width={280}
       shadow="md"
       position="bottom-start"
-      withArrow={false} // Remove the arrow from the menu
+      withArrow={false}
       styles={{
         dropdown: {
           width: '320px',
@@ -107,13 +107,12 @@ const SwapSettingMenu = ({ maxSlippage, setMaxSlippage, customSlippage, setCusto
       }}
     >
       <Menu.Target>
-        <Box onClick={() => { }} className={styles.iconButton}>
-          <span className={`icon-setting`} />
+        <Box onClick={() => { }} className={styles.circleIconButton}>
+          <span className="icon-setting" />
         </Box>
       </Menu.Target>
 
       <Menu.Dropdown>
-        {/* First Row: Max Slippage */}
         <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
           <Box style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Text size="xs" c="primary.9" fw={500}>
@@ -141,7 +140,7 @@ const SwapSettingMenu = ({ maxSlippage, setMaxSlippage, customSlippage, setCusto
                       fontSize: '8px',
                       fontStyle: 'normal',
                       fontWeight: 400,
-                      lineHeight: '9px', // 112.5%
+                      lineHeight: '9px',
                       textAlign: 'center',
                     }}
                   >
@@ -149,16 +148,16 @@ const SwapSettingMenu = ({ maxSlippage, setMaxSlippage, customSlippage, setCusto
                   </Text>
                 </Box>
               }
-              position="bottom" // Show tooltip below the SVG
+              position="bottom"
               withArrow
               arrowSize={6}
               styles={{
                 tooltip: {
-                  background: 'transparent', // Remove Mantine's default tooltip background
-                  padding: 0, // Remove default padding
+                  background: 'transparent',
+                  padding: 0,
                 },
                 arrow: {
-                  background: '#070A0A', // Match tooltip background
+                  background: '#070A0A',
                 },
               }}
             >
@@ -236,11 +235,11 @@ const SwapSettingMenu = ({ maxSlippage, setMaxSlippage, customSlippage, setCusto
               p={0}
               m={0}
               value={customSlippage}
-              onFocus={handleFocus} // Handle focus
-              onBlur={handleBlur} // Handle blur
+              onFocus={handleFocus}
+              onBlur={handleBlur}
               onChange={(e) => handleCustomSlippageChange(e.target.value)}
               classNames={{
-                input: `${styles['max-slippage-input']} ${isFocused ? styles['highlighted-input'] : ''}`, // Apply conditional class
+                input: `${styles['max-slippage-input']} ${isFocused ? styles['highlighted-input'] : ''}`,
                 wrapper: styles['max-slippage-input-wrapper'],
               }}
               placeholder="0.00%"
@@ -276,7 +275,7 @@ const SwapSettingMenu = ({ maxSlippage, setMaxSlippage, customSlippage, setCusto
                       fontSize: '8px',
                       fontStyle: 'normal',
                       fontWeight: 400,
-                      lineHeight: '9px', // 112.5%
+                      lineHeight: '9px',
                       textAlign: 'center',
                     }}
                   >
@@ -284,23 +283,28 @@ const SwapSettingMenu = ({ maxSlippage, setMaxSlippage, customSlippage, setCusto
                   </Text>
                 </Box>
               }
-              position="bottom" // Show tooltip below the SVG
+              position="bottom"
               withArrow
               arrowSize={6}
               styles={{
                 tooltip: {
-                  background: 'transparent', // Remove Mantine's default tooltip background
-                  padding: 0, // Remove default padding
+                  background: 'transparent',
+                  padding: 0,
                 },
                 arrow: {
-                  background: '#070A0A', // Match tooltip background
+                  background: '#070A0A',
                 },
               }}
             >
               <span className={`icon-info ${styles.info}`} />
             </Tooltip>
           </Box>
-          <Switch size="sm" checked={zeroSlippage} onChange={(event) => setZeroSlippage(event.currentTarget.checked)} />
+          <Switch size="sm" checked={zeroSlippage} onChange={(event) => setZeroSlippage(event.currentTarget.checked)}
+            classNames={{
+              thumb: styles.switchThumb,
+              track: styles.switchTrack,
+            }}
+          />
         </Box>
       </Menu.Dropdown>
     </Menu>

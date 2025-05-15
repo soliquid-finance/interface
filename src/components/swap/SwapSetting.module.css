@@ -1,4 +1,4 @@
-.iconButton {
+.circleIconButton {
     width: 30px;
     height: 30px;
     flex-shrink: 0;
@@ -14,9 +14,13 @@
     transition: border-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
-.iconButton:hover {
+.circleIconButton:hover {
     border: 1px solid rgba(195, 255, 251, 1);
     color: #C3FFFB;
+}
+
+.circleIconButton > span {
+    font-size: 14px;
 }
 
 .max-slippage-input {
@@ -24,6 +28,9 @@
     padding: 3px 8px;
     min-height: 18px;
     height: 18px;
+    border-radius: 16px;
+    background: #2A3838;
+    border: 0px;
 }
 
 .settings {
@@ -48,3 +55,26 @@
     color: #C3FFFB;
     /* Highlight text color */
 }
+
+.switchThumb {
+  background: #2A3838;
+  border: 0px;
+  transition: background 0.5s, border-color 0.5s;
+}
+
+.switchTrack {
+    background: transparent;
+    border: 0.5px solid #2A3838;
+    transition: background 0.5s, border-color 0.5s;
+}
+
+[data-checked="true"] .switchThumb {
+  background: #C3FFFB;
+}
+
+[data-checked="true"] .switchTrack {
+    background: #2A3838;
+    border: 0.5px solid transparent;
+}
+
+

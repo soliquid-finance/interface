@@ -72,6 +72,7 @@ export default function SwapButton() {
                                 alignItems: 'center',
                                 borderRadius: '16px',
                                 background: 'linear-gradient(91deg, #C3FFFB 1.51%, #89FFF7 98.57%)',
+                                color: '#000',
                             }
                             : {
                                 display: 'flex',
