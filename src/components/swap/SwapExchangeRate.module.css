@@ -6,12 +6,13 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    background-color: #121A1A;
+    background-color: rgba(195, 255, 251, 0.10);
     border: 1px solid transparent;
     color: rgba(195, 255, 251, 0.50);
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     cursor: pointer;
     transition: border-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 }
 
 .circleIconButton:hover {
