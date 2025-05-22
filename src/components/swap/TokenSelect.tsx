@@ -1,14 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useDebouncedValue } from '@mantine/hooks';
 import { Text, Modal, TextInput, Group } from '@mantine/core';
 import TokenListItem from './TokenListItem';
-import { useCluster } from '@/components/solana/providers';
+// import { useCluster } from '@/components/solana/providers';
 import clsx from 'clsx';
 import styles from './TokenSelect.module.css';
 
 import tokens from "./token.data";
 import { SolanaToken } from '@/types';
+import { ChainContext } from '@/context/ChainContext';
+import { ClusterNetwork } from '@/context/ChainContextProvider';
 
 interface TokenSelectProps {
     initialToken: SolanaToken | null;
@@ -25,6 +27,7 @@ const fetchTokens = async (chainId: number): Promise<SolanaToken[]> => {
 };
 
 export default function TokenSelect({ initialToken, onSelect, opened: externalOpened, setOpened: externalSetOpened }: TokenSelectProps) {
+
     const [internalOpened, setInternalOpened] = useState(false);
     const opened = externalOpened ?? internalOpened; // Use external or internal state
     const setOpened = externalSetOpened ?? setInternalOpened; // Use external or internal setter
@@ -32,16 +35,17 @@ export default function TokenSelect({ initialToken, onSelect, opened: externalOp
     const [debouncedSearch] = useDebouncedValue(search, 200);
     const [selectedToken, setSelectedToken] = useState<SolanaToken | null>(initialToken);
 
-    const { cluster } = useCluster();
+    // const { cluster } = useCluster();
+    const { displayName: currentChainName, chain, getExplorerUrl } = useContext(ChainContext);
 
     // Determine chainId based on the current cluster
     const getChainId = () => {
-        switch (cluster.network) {
-            case 'mainnet-beta':
+        switch (chain) {
+            case ClusterNetwork.Mainnet:
                 return 101;
-            case 'testnet':
+            case ClusterNetwork.Testnet:
                 return 102;
-            case 'devnet':
+            case ClusterNetwork.Devnet:
                 return 103;
             default:
                 return 103; // Default to mainnet
@@ -70,7 +74,6 @@ export default function TokenSelect({ initialToken, onSelect, opened: externalOp
 
     if (isLoading) return <div>Loading...</div>;
     if (isError) return <div>Error loading tokens</div>;
-
 
     return (
         <>

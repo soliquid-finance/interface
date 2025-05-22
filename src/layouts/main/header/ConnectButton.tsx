@@ -1,95 +1,67 @@
-import { useState, useEffect } from "react";
+import { useState, useContext, Suspense } from "react";
 import { useMediaQuery } from '@mantine/hooks'; // Import useMediaQuery
 
-// solana 
-import { Connection, PublicKey } from '@solana/web3.js';
-import { useWalletMultiButton } from "@solana/wallet-adapter-base-ui";
-import { useWallet } from '@solana/wallet-adapter-react'
-
 // ui
-import { Avatar, Button, Drawer, Group, Text, Box, ActionIcon, Stack, Badge } from '@mantine/core';
-import { WalletModalConfig, WalletSelectionModal } from "../../../components/solana/WalletSelectionModal";
+import { Avatar, Button, Drawer, Group, Text, Box, Stack, Badge } from '@mantine/core';
 import { shortenAddress } from '@/utils/shortenAddress'; // Utility to shorten addresses
-import { useCluster } from "@/components/solana/providers";
-import { RxExternalLink, RxCopy } from "react-icons/rx";
-import toast from 'react-hot-toast';
-
 import styles from './ConnectButton.module.css';
+import { UiWallet, uiWalletAccountBelongsToUiWallet, useDisconnect, useWallets } from "@wallet-standard/react";
+
+import { SelectedWalletAccountContext } from "@/context/SelectedWalletAccountContext";
+import { ConnectWalletDialog } from "@/components/solana/ConnectWalletDialog";
+import { ChainContext } from "@/context/ChainContext";
+import { RxExternalLink, RxCopy } from "react-icons/rx";
+import toast from "react-hot-toast";
+import { Balance } from "@/components/solana/Balance";
 
 export default function ConnectButton() {
 
-    const [walletModalConfig, setWalletModalConfig] = useState<Readonly<WalletModalConfig> | null>(null);
-    const { buttonState, onConnect, onDisconnect, onSelectWallet } = useWalletMultiButton({
-        onSelectWallet: setWalletModalConfig,
-    });
+    // const wallets = useWallets();
+    const { displayName: currentChainName, chain, getExplorerUrl } = useContext(ChainContext);
+    const [selectedWalletAccount, setSelectedWalletAccount, wallet] = useContext(SelectedWalletAccountContext);
 
     const [drawerOpened, setDrawerOpened] = useState(false);
-    const [balance, setBalance] = useState<number | null>(null);
-
-    const { cluster, getExplorerUrl } = useCluster();
-    const { publicKey, wallet } = useWallet();
-    const walletAddress = publicKey ? publicKey.toBase58() : '';
+    const [modalOpen, setModalOpen] = useState(false);
 
     const isMobile = useMediaQuery('(max-width: 768px)'); // Detect mobile view
+    const isConnected = !!selectedWalletAccount;
 
-    useEffect(() => {
-        if (publicKey) {
-            const connection = new Connection(cluster.endpoint);
-            connection.getBalance(publicKey).then((lamports) => {
-                setBalance(lamports / 1e9); // Convert lamports to SOL
-            });
+    let label = 'Connect';
+    if (selectedWalletAccount && selectedWalletAccount?.address) {
+        label = shortenAddress(selectedWalletAccount?.address);
+    }
+
+
+    // const handleButtonClick = () => {
+    //     setOpened(true);
+    // }
+
+    const handleButtonClick = () => {
+        if (isConnected) {
+            setDrawerOpened(true);
+        } else {
+            setModalOpen(true);
         }
-    }, [publicKey, cluster]);
+    };
 
-    const handleCopyAddress = () => {
-        if (walletAddress) {
-            navigator.clipboard.writeText(walletAddress);
+    const onError = (error: Error) => {
+        alert(error.message);
+    }
+
+    // console.log({
+    //     wallet,
+    //     wallets,
+    //     isConnected,
+    //     selectedWalletAccount
+    // })
+
+
+    const handleCopyAddress = (address: string) => {
+        if (address) {
+            navigator.clipboard.writeText(address);
             toast.success('Address copied to clipboard!');
         }
     };
-
-    let label;
-    switch (buttonState) {
-        case 'connected':
-            //label = 'Disconnect';
-            label = shortenAddress(walletAddress);
-            break;
-        case 'connecting':
-            label = 'Connecting';
-            break;
-        case 'disconnecting':
-            label = 'Disconnecting';
-            break;
-        case 'has-wallet':
-            label = 'Connect';
-            break;
-        case 'no-wallet':
-            label = 'Connect';
-            break;
-    }
-
-    const handleSelectWallet = () => {
-        setWalletModalConfig(null);
-    };
-
-    const handleButtonClick = () => {
-        if (publicKey) {
-            setDrawerOpened(true);
-        }
-    }
-
-    // const getClusterBadgeColor = () => {
-    //     switch (cluster.network) {
-    //         case 'mainnet-beta':
-    //             return 'green';
-    //         case 'testnet':
-    //             return 'yellow';
-    //         case 'devnet':
-    //             return 'blue';
-    //         default:
-    //             return 'gray';
-    //     }
-    // };
 
     return (
         <>
@@ -98,35 +70,16 @@ export default function ConnectButton() {
                     root: styles.root,
                     label: styles.label
                 }}
-                disabled={buttonState === 'connecting' || buttonState === 'disconnecting'}
-                onClick={() => {
-                    switch (buttonState) {
-                        case 'connected':
-                            handleButtonClick?.();
-                            // onDisconnect?.();
-                            break;
-                        case 'connecting':
-                        case 'disconnecting':
-                            break;
-                        case 'has-wallet':
-                            onConnect?.();
-                            break;
-                        case 'no-wallet':
-                            onSelectWallet?.();
-                            break;
-                    }
-                }}
+                onClick={handleButtonClick}
             >
-                {buttonState == 'connected' ? (
-                    <Avatar
-                        src={wallet?.adapter.icon}
-                        alt={wallet?.adapter.name}
-                        size={16}
-                        radius="xl"
-                        mr={!isMobile ? "xs" : 0} // Adjust margin for mobile
-                    />
-                ) : (<span className="icon-wallet" />)}
-                {!isMobile && label} {/* Hide label in mobile view */}
+                {selectedWalletAccount && selectedWalletAccount?.address ? (<Avatar
+                    src={wallet?.icon}
+                    alt={wallet?.name}
+                    size={16}
+                    radius="xl"
+                    mr={!isMobile ? "xs" : 0}
+                />) : (<span className="icon-wallet" />)}
+                {!isMobile && label}
             </Button>
             <Drawer
                 opened={drawerOpened}
@@ -137,19 +90,20 @@ export default function ConnectButton() {
                 withCloseButton={false}
             >
                 <Box p="md">
-                    {wallet && publicKey && (
+                    {selectedWalletAccount && (
                         <Box mb="md">
                             <Badge className={styles.networkBadge} size="sm">
-                                {cluster.name}
+                                {currentChainName}
+                                {/* {cluster?.name} */}
                             </Badge>
                             <Group justify="space-between" align="center">
                                 <Group gap="xs">
                                     <Text size="xs" c="primary.9" style={{ overflow: 'hidden', whiteSpace: 'nowrap' }}>
-                                        {shortenAddress(publicKey.toBase58(), 8)}
+                                        {shortenAddress(selectedWalletAccount.address, 8)}
                                     </Text>
                                     <Button
                                         className={styles.iconButton}
-                                        onClick={handleCopyAddress}
+                                        onClick={() => handleCopyAddress(selectedWalletAccount.address)}
                                         variant="subtle"
                                         size="xs"
                                     >
@@ -159,7 +113,7 @@ export default function ConnectButton() {
                                 <Button
                                     className={styles.iconButton}
                                     component="a"
-                                    href={getExplorerUrl(`address/${publicKey.toBase58()}`)}
+                                    href={getExplorerUrl?.(`address/${selectedWalletAccount.address}`)}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     variant="subtle"
@@ -172,30 +126,62 @@ export default function ConnectButton() {
                                 <Text fw={900} className={styles.balance}>
                                     $0
                                 </Text>
-                                <Text size="sm" fw={400} c="#627170">
+                                <Suspense fallback={null}>
+                                    <Balance account={selectedWalletAccount} />
+                                </Suspense>
+                                {/* <Text size="sm" fw={400} c="#627170">
                                     ~{balance !== null ? balance.toFixed(4) : '0'} SOL
-                                </Text>
+                                </Text> */}
                             </Stack>
                         </Box>
                     )}
-                    <Button
-                        fullWidth
-                        classNames={{
-                            root: styles.disconnectButton,
+                    {wallet && <DisconnectButton
+                        wallet={wallet}
+                        onDisconnect={async (wallet: UiWallet) => {
+                            if (selectedWalletAccount && uiWalletAccountBelongsToUiWallet(selectedWalletAccount, wallet)) {
+                                console.log('Disconnecting wallet:', wallet);
+                                setSelectedWalletAccount(undefined);
+                            }
                         }}
-                        onClick={() => {
-                            onDisconnect?.();
-                            setDrawerOpened(false);
-                        }}
-                    >
-                        Disconnect
-                    </Button>
+                    />}
                 </Box>
             </Drawer>
-
-            <WalletSelectionModal config={walletModalConfig} onClose={handleSelectWallet} />
+            <ConnectWalletDialog
+                opened={modalOpen}
+                onClose={() => setModalOpen(false)}
+                // onAccountSelect={setSelectedWalletAccount}
+                onError={() => onError}
+            />
         </>
     );
 }
 
 
+
+type DisconnectButtonProps = {
+    wallet: UiWallet;
+    onDisconnect: (wallet: UiWallet) => void;
+};
+
+const DisconnectButton = ({ wallet, onDisconnect }: DisconnectButtonProps) => {
+    const [isDisconnecting, disconnect] = useDisconnect(wallet);
+
+    const onClick = async () => {
+        await disconnect();
+        onDisconnect(wallet);
+        
+        // window.location.reload(); // Refresh the page after disconnect
+    }
+
+    return (
+        <Button
+            fullWidth
+            classNames={{
+                root: styles.disconnectButton,
+            }}
+            onClick={onClick}
+        >
+            Disconnect
+        </Button>
+    )
+}

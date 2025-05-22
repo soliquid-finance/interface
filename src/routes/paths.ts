@@ -2,6 +2,7 @@
 export const paths = {
   root: {
     home: '/',
-    swap: '/swap'
+    swap: '/swap',
+    test: '/test',
   },
 };

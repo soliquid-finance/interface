@@ -19,7 +19,11 @@ const router = createBrowserRouter([
       {
         path: paths.root.swap,
         element: LazyPage(() => import('@/pages/swap')),
-      }
+      },
+      // {
+      //   path: paths.root.test,
+      //   element: LazyPage(() => import('@/pages/test')),
+      // }
     ],
   },
 ]);

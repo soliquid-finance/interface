@@ -1,8 +1,6 @@
-import { useEffect, useState } from 'react';
+
 import { Group, Text } from '@mantine/core';
-import { useWallet } from '@solana/wallet-adapter-react';
 import { SolanaToken } from '@/types'; // Import from the centralized types file
-import { Connection, PublicKey } from '@solana/web3.js';
 import { useSwapContext } from './SwapProvider';
 
 interface TokenBalanceProps {

@@ -1,4 +1,4 @@
-import { ReactNode, useState, useEffect } from 'react';
+import { ReactNode, useState, useEffect, useContext } from 'react';
 import { useMediaQuery } from '@mantine/hooks';
 
 import { SolanaToken } from '@/types';
@@ -8,10 +8,8 @@ import { useQuery } from '@tanstack/react-query';
 import { useDebouncedValue } from '@mantine/hooks';
 import { Text, Modal, TextInput, Group } from '@mantine/core';
 
-import { useCluster } from '@/components/solana/providers';
 import TokenListItem from '../swap/TokenListItem';
-
-
+import { ChainContext } from '@/context/ChainContext';
 
 const fetchTokens = async (chainId: number): Promise<SolanaToken[]> => {
   const response = await fetch('https://raw.githubusercontent.com/solana-labs/token-list/main/src/tokens/solana.tokenlist.json');
@@ -37,16 +35,17 @@ export function SearchBar({
   const [search, setSearch] = useState('');
   const [debouncedSearch] = useDebouncedValue(search, 200);
 
-  const { cluster } = useCluster();
+  // const { cluster } = useCluster();
+  const { displayName: currentChainName, chain } = useContext(ChainContext);
 
   // Determine chainId based on the current cluster
   const getChainId = () => {
-    switch (cluster.network) {
-      case 'mainnet-beta':
+    switch (chain) {
+      case 'solana:mainnet-beta':
         return 101;
-      case 'testnet':
+      case 'solana:testnet':
         return 102;
-      case 'devnet':
+      case 'solana:devnet':
         return 103;
       default:
         return 103; // Default to mainnet

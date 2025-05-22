@@ -1,5 +1,5 @@
-import SwapForm from '@/components/swap';
 import { SwapProvider } from '@/components/swap/SwapProvider';
+import SwapForm from '@/components/swap';
 import { Box } from '@mantine/core';
 
 export default function HomePage() {
@@ -14,6 +14,7 @@ export default function HomePage() {
         alignItems: 'center',
       }}
     >
+      
       <SwapProvider>
         <SwapForm />
       </SwapProvider>

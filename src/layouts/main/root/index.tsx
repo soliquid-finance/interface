@@ -6,10 +6,14 @@ import { Box } from '@mantine/core';
 import { SearchBar } from '@/components/SearchBar';
 import { SearchMenu } from '@/layouts/main/header/search-menu';
 import ConnectButton from '../header/ConnectButton';
+import { useContext } from 'react';
+import { SelectedWalletAccountContext } from '@/context/SelectedWalletAccountContext';
 import AppSettingButton from '../header/AppSettingButton';
+
 
 export function RootLayout() {
   const [opened, { toggle }] = useDisclosure();
+  const [selectedWalletAccount] = useContext(SelectedWalletAccountContext);
   return (
     <AppShell
       header={{ height: 60 }}
@@ -38,7 +42,9 @@ export function RootLayout() {
           </Box>
           <Group>
             <AppSettingButton />
+            {/* {selectedWalletAccount && selectedWalletAccount?.address} */}
             <ConnectButton />
+            {/* <ConnectWalletMenu>Connect Wallet</ConnectWalletMenu> */}
             {/* <Burger opened={opened} onClick={toggle} size="sm" hiddenFrom="sm" /> Move Burger to the right */}
           </Group>
         </Group>

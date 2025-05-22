@@ -1,13 +1,8 @@
-import '@mantine/carousel/styles.layer.css';
-import '@mantine/charts/styles.layer.css';
-import '@mantine/code-highlight/styles.layer.css';
 import '@mantine/core/styles.layer.css';
 import '@mantine/dates/styles.layer.css';
-import '@mantine/dropzone/styles.layer.css';
 import '@mantine/notifications/styles.layer.css';
 import '@mantine/nprogress/styles.layer.css';
 import '@mantine/spotlight/styles.layer.css';
-import '@mantine/tiptap/styles.layer.css';
 import 'mantine-datatable/styles.layer.css';
 import './styles/global.css';
 
@@ -22,26 +17,37 @@ import { queryClient } from '@/api/query-client';
 
 import { Router } from '@/routes/router';
 import { theme } from '@/theme';
-import { ClusterProvider, SolanaProvider } from './components/solana/providers';
+
 import { Toaster } from 'react-hot-toast';
+import { ChainContextProvider } from './context/ChainContextProvider';
+import { SelectedWalletAccountContextProvider } from './context/SelectedWalletAccountContextProvider';
+import { RpcContextProvider } from './context/RpcContextProvider';
+import { SolanaProvider } from './context/SolanaProvider';
 
 export function App() {
   return (
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
-        <ClusterProvider>
-          <SolanaProvider>
-            {/* <ReactQueryDevtools initialIsOpen={false} /> */}
-              <MantineProvider theme={theme} forceColorScheme='dark'>
-                <Notifications position="bottom-center" />
-                <NavigationProgress />
-                <Toaster />
-                <ModalsProvider>
-                  <Router />
-                </ModalsProvider>
-              </MantineProvider>
-          </SolanaProvider>
-        </ClusterProvider>
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+
+        <ChainContextProvider>
+          <SelectedWalletAccountContextProvider>
+            <RpcContextProvider>
+              <SolanaProvider>
+
+                <MantineProvider theme={theme} forceColorScheme='dark'>
+                  <Notifications position="bottom-center" />
+                  <NavigationProgress />
+                  <Toaster />
+                  <ModalsProvider>
+                    <Router />
+                  </ModalsProvider>
+                </MantineProvider>
+              </SolanaProvider>
+            </RpcContextProvider>
+          </SelectedWalletAccountContextProvider>
+        </ChainContextProvider>
+
       </QueryClientProvider>
     </HelmetProvider>
   );

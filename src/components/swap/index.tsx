@@ -1,28 +1,26 @@
-import { Card, Text, Group, Button, Box, Stack, useMantineTheme } from '@mantine/core';
-import { useState, useRef, useEffect } from 'react';
+import { Card, Text, Group, Button, Box, Stack, useMantineTheme, NumberInput } from '@mantine/core';
+import { useState, useRef, useEffect, useContext } from 'react';
 
 import { PortionChip } from '@/components/PortionChip';
 import TokenSelect from './TokenSelect';
 import SwapSetting from './SwapSetting';
-import SwapButton from '@/components/solana/SwapButton';
+import SwapExchangeRate from './SwapExchangeRate';
 import NetworkFeeSection from './NetworkFeeSection';
-import { useSwapContext } from './SwapProvider';
+import SwapButton from '@/components/solana/SwapButton';
 
 import styles from './SwapForm.module.css';
 
-import SwapExchangeRate from './SwapExchangeRate';
-import { useWallet } from '@solana/wallet-adapter-react';
+import { useSwapContext } from './SwapProvider';
+import { SolanaContext } from '@/context/SolanaProvider';
+
 import TokenBalance from './TokenBalance'; // Import the new component
-import { Connection, PublicKey } from '@solana/web3.js';
-import { useCluster } from '../solana/providers';
+
 
 const SwapForm = () => {
+  const { connected } = useContext(SolanaContext);
 
-  const { publicKey, wallet, connected } = useWallet();
-  const { cluster, getExplorerUrl } = useCluster();
-
-  const theme = useMantineTheme();
-  const { setTokenFrom, setTokenTo, tokenFrom, tokenTo, setSwapFromAmount, swapFromAmount, isTokenFromBalanceSufficient } = useSwapContext();
+  // const theme = useMantineTheme();
+  const { setTokenFrom, setTokenTo, tokenFrom, tokenTo, tokenFromBalance, setAmountToSwapFrom, amountToSwapFrom, isTokenFromBalanceSufficient } = useSwapContext();
   const [highlightedCard, setHighlightedCard] = useState<'from' | 'to'>('from'); // Track which card is highlighted
 
   const inputFromRef = useRef<HTMLInputElement>(null);
@@ -36,35 +34,18 @@ const SwapForm = () => {
     const tempToken = tokenFrom;
     setTokenFrom(tokenTo);
     setTokenTo(tempToken);
+    setAmountToSwapFrom(0);
   };
 
+
+  // Only fetch if both are defined and not SOL
+  // const shouldFetchSpl = walletAddress && mintAddress && tokenFrom?.symbol !== 'SOL';
+
   const handlePortionClick = async (portion: number) => {
-    if (connected && publicKey && tokenFrom) {
-      try {
-        const connection = new Connection(cluster.endpoint); // Replace with appropriate network URL
-        let balance = 0;
-
-        if (tokenFrom.symbol === 'SOL') {
-          const lamports = await connection.getBalance(publicKey);
-          balance = lamports / 1e9; // Convert lamports to SOL
-        } else {
-          const tokenAccounts = await connection.getParsedTokenAccountsByOwner(publicKey, {
-            mint: new PublicKey(tokenFrom.address),
-          });
-          const tokenAccount = tokenAccounts.value.find(
-            (account) => account.account.data.parsed.info.tokenAmount.uiAmount
-          );
-          balance = tokenAccount?.account.data.parsed.info.tokenAmount.uiAmount || 0;
-        }
-
-        const calculatedAmount = balance > 0 ? (balance * portion).toFixed(tokenFrom.decimals) : '0';
-        setSwapFromAmount(calculatedAmount);
-      } catch (error) {
-        console.error('Failed to fetch balance:', error);
-        setSwapFromAmount('0');
-      }
+    if (tokenFromBalance) {
+      setAmountToSwapFrom(portion * tokenFromBalance);
     } else {
-      setSwapFromAmount('0');
+      setAmountToSwapFrom(0)
     }
   };
 
@@ -76,6 +57,11 @@ const SwapForm = () => {
   const handleCardClickTo = () => {
     setHighlightedCard('to'); // Highlight the "to" card
   };
+
+  const handleTokenSwapFromInputChange = (value: string) => {
+    // const value = e.target.value || '0';
+    setAmountToSwapFrom(parseFloat(value));
+  }
 
   return (
     <Stack align="center" w="100%" maw="450px" miw="300px">
@@ -111,18 +97,22 @@ const SwapForm = () => {
               initialToken={tokenFrom}
               onSelect={(token) => setTokenFrom(token)}
             />
-            <input
-              id="swap-input-from"
-              type="text"
-              placeholder="0.00"
-              value={swapFromAmount}
-              onChange={(e) => setSwapFromAmount(e.target.value)}
-              className={styles.input}
-              style={{
-                color: isTokenFromBalanceSufficient ? '#FFFFFF' : '#FF4800',
+            <NumberInput
+              id="input-amount-swap-from"
+              classNames={{
+                root: styles.inputRoot,
+                input: `${styles.input} ${isTokenFromBalanceSufficient ? '' : styles.inputError}`,
               }}
+              hideControls={true}
+              value={amountToSwapFrom}
+              onChange={(value) => handleTokenSwapFromInputChange(value?.toString() || '')}
+              placeholder="0.00"
+              inputMode='decimal'
+              min={0}
               onFocus={() => setHighlightedCard('from')}
-              ref={inputFromRef} // Attach the ref to the input
+              ref={inputFromRef}
+            // decimalScale={2}
+            // fixedDecimalScale={true}
             />
           </Group>
           <Group justify="flex-end" align="center">
@@ -164,11 +154,18 @@ const SwapForm = () => {
               initialToken={tokenTo}
               onSelect={(token) => setTokenTo(token)}
             />
-            <input
-              id="swap-input-to"
-              type="text"
+            <NumberInput
+              id="input-amount-swap-to"
+              classNames={{
+                root: styles.inputRoot,
+                input: styles.input,
+              }}
+              hideControls={true}
+              // value={amountToSwapTo}
+              // onChange={(value) => handleTokenSwapFromInputChange(value?.toString() || '')}
               placeholder="0.00"
-              className={styles.input}
+              inputMode='decimal'
+              min={0}
               onFocus={() => setHighlightedCard('to')}
             />
           </Group>
